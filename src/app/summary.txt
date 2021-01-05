@@ -1,0 +1,180 @@
+
+------------------------------------
+@ViewChild 
+    It is very useful whenever we want to have a programmatic reference to an element in the html template of the component
+
+    it allows to query elements defined in the template component (.html) 
+    via the template ref #varName
+    e.g. 
+        <input #inputText .. >
+
+        @ViewChild('inputText') input;
+        queries the input field with var name #inputText
+
+    The earliest moment when the field can be queried is in the 
+        ngAfterViewInit 
+    lifecycle hook.
+
+    @ViewChild can only query elements defined in its component and cannot access to element 
+    in child components or parent components
+
+------------------------------------
+@ViewChildren
+    It is very useful whenever we want to have a programmatic reference to a collection of element in the html template of the component
+    
+    it allows to query collection of elements
+
+    @ViewChildren(CourseCardComponent)
+    cards : QueryList<CourseCardComponent>;
+    In this way we are querying all CourseCard components displayed in the view
+
+
+    @ViewChildren(CourseCardComponent, {read: ElementRef})
+    cards : QueryList<ElementRef>;
+    .. but we can also query plain DOM Element specifying { read: ElementRef } as second parameter
+    of @ViewChildren and also changing the template reference QueryList<ElementRef>
+
+------------------------------------
+Content Projection <ng-content>
+    All about to configure the content of a component
+
+    Consumer Component
+    <course-card ...>
+        /* the content part of the consumer component */
+        <img class="course-image" .. />
+        <p class="course-description ... />
+        <h5> ... </h5>    
+    </course-card>
+
+    Course Card Component
+
+    <ng-content select=".course-image"></ng-content>
+    .. projects the content of the consumer component that matches the class '.course-image'
+
+    <ng-content select=".course-description"></ng-content>
+    .. projects the content of the consumer component  that matches the class '.course-description'
+
+    <ng-content ></ng-content>
+    .. projects the content of the consumer component that does not match any selectors
+
+    the select property can select classes, or the selector of the component
+    <ng-content select="course-image"></ng-content>
+    course-image is the selector of the component CourseImageComponent
+
+------------------------------------
+Content Projection @ContentChild
+    It is very useful whenever we want to have a programmatic reference to an element that is part of the ng-content element.
+
+    Consumer Component
+    <course-card ...>
+        /* the content part of the consumer component */
+        <img  #courseImage  class="course-image" .. />
+
+        <p class="course-description ... />
+        <h5> ... </h5>    
+    </course-card>
+
+    Course Card Component typescript 
+    Because CourseCard cannot access to #courseImage via @ViewChild because it is on the parent component,
+    we can use ...
+
+    @ContentChild('courseImage') image;
+
+    ngAfterViewInit() {
+        // here we can access the image variable
+    }
+
+    Important!: The scope of @ContentChild is restricted to the content part of the consumer compoenent, 
+    so this means the parts that are in <ng-content></ng-content>
+
+------------------------------------
+Content Projection @ContentChildren
+    It is very useful whenever we want to have a programmatic reference to a collection of elements that is part of the ng-content element.
+
+    Consumer Component
+        <course-card ...>
+            /* the content part of the consumer component */
+            <course-image [src]="courses[0].iconUrl" ></course-image>
+            <course-image [src]="courses[1].iconUrl" ></course-image>
+            <course-image [src]="courses[2].iconUrl" ></course-image>
+        </course-card>
+    
+    Course Card Component
+    @ContentChildren(CourseImageComponent)
+    images: QueryList<CourseImageComponent>
+
+    ngAfterContentInit() {
+        // here we can access the images variable
+    }
+
+    ... or to access plain DOM Elements we can specify {read: ElementRef}
+    @ContentChildren(CourseImageComponent, {read: ElementRef})
+    images: QueryList<ElementRef>;
+
+------------------------------------
+Ng Template
+
+    <ng template #blankImage>
+        <p>...</p>
+    </ng template>
+
+    <div *ngIf="course.imageUrl; else blankImage">
+    ...
+    </div>
+
+    the html part inside <ng-template> is only rendered if it is referenced somewhere in the html template
+    for example if the course.imageUrl don't exists then  blankImage template will be rendered
+
+    ------------------------------------
+    Configure template so it can be reused
+
+    ************
+    AppComponent (consumer of CourseCardComponent)
+    <ng-template #blankImage let-courseName="description">
+        <p class="warn">{{courseName}} has no image yet.</p>
+        ...
+    </ng-template>
+        #blankImage: is the template variable referencing the ng-template
+        
+        let-courseName: defines a new variable courseName whose scope is inside the ng-template
+        and accessed via interpolation {{ courseName }}
+        let-  is an Angular syntax to define a variable
+
+        let-courseName="description": description is the context that will be injected
+        when the template will be instanciated
+
+    <course-card (courseSelected)="onCourseSelected($event)" [course]="course" 
+        [noImageTpl]="blankImage">
+        ...
+        <course-image [src]="course.iconUrl"></course-image>
+        ...
+    
+    [noImageTpl]="blankImage"
+    blankImage (that is the template defined with ng-template) is the template reference 
+    that will be passed as an input property to the course-card component via [noImageTpl]
+
+
+    ************
+    CourseCardComponent
+
+    @Input()
+    noImageTpl: TemplateRef<any>;
+    noImageTpl is declared of type TemplateRef so it should contain a template reference
+
+    <ng-content select="course-image"
+                *ngIf="course.iconUrl; else noImage"></ng-content>
+    If course has an iconUrl the content of course-image component will be displayed 
+    otherwise the content of ng-template noImage will be displayed
+
+    <ng-template #noImage>
+        <ng-container
+                *ngTemplateOutlet="noImageTpl;context: {description:course.description}">
+        </ng-container>
+    </ng-template>
+    ng-container, via *ngTemplateOutlet directive, creates an instance of  noImageTpl 
+    that is the input property received by the consumer (AppComponent); 
+    and also it passes the context with the variable description that is received by 
+    <ng-template #blankImage let-courseName="description">
+
+
+------------------------------------

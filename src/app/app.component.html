@@ -5,23 +5,73 @@
 
 </div>
 
+<div class="course-card">
+    Test outside salmon-theme Course Card
+</div>
+
+<div class="salmon-theme">
+
+    <div class="course-card">
+        Test inside salmon-theme Course Card
+    </div>
 
 
-<div class="courses" *ngIf="courses[0] as course">
+    <div class="courses" *ngIf="courses[0] as course">
 
-    <course-card
-            (courseSelected)="onCourseSelected($event)"
-                 [course]="course">
+        <course-card 
+            #highlighter="hglht"
+            highlighted
+            (toggleHighlight)="onToggle($event)"
+                (courseSelected)="onCourseSelected($event)"
+                    [course]="course">
 
-        <course-image [src]="course.iconUrl"></course-image>
+            <!--  *ngxUnless custom structural directive (ngx-unless.directive.ts)  -->
+            <course-image 
+                *ngxUnless="!course.iconUrl"
+                [src]="course.iconUrl">
+            </course-image>
 
-        <div class="course-description">
-            {{ course.longDescription }}
+            <!-- <course-image [src]="course.iconUrl"></course-image> -->
+
+            <div class="course-description" 
+                (dblclick)="highlighter.toggle()" >
+                {{ course.longDescription }}
+            </div>
+
+        </course-card>
+
+
+    </div>
+
+    <!--  this is what Angular, under the hood, does when it applies a structural directive as *ngIf (for example in the div of courses)  -->
+    <!--  In order to do that, Angular has to grab a reference onto the template in order to instanciate it  -->
+    <ng-template [ngIf]="courses[0]" let-course>
+
+        <div class="courses">
+        
+            <course-card 
+                #highlighter="hglht"
+                highlighted
+                (toggleHighlight)="onToggle($event)"
+                    (courseSelected)="onCourseSelected($event)"
+                        [course]="course">
+
+                
+        
+                <course-image [src]="course.iconUrl"></course-image>
+        
+                <div class="course-description" 
+                    (dblclick)="highlighter.toggle()" >
+                    {{ course.longDescription }}
+                </div>
+        
+            </course-card>
+        
+        
         </div>
 
-    </course-card>
+    </ng-template>
 
 
 </div>
-
 
