@@ -178,3 +178,9 @@ Ng Template
 
 
 ------------------------------------
+
+View Encapsulation links
+https://angular.io/guide/component-styles
+
+------------------------------------
+
