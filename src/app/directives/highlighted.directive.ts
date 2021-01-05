@@ -1,4 +1,5 @@
-import { Directive, EventEmitter, HostBinding, HostListener, Input, Output } from '@angular/core';
+import {Directive, EventEmitter, Host, HostBinding, HostListener, Input, Output} from '@angular/core';
+
 
 @Directive({
   selector: '[highlighted]',
@@ -12,10 +13,15 @@ export class HighlightedDirective {
   @Output('toggleHighlight')
   toggleHighlight = new EventEmitter();
 
-  constructor() { 
-    console.log('hightlighted directive created');
-  }
+    /* @Host() private service: AnyService */
+    /* 
+        @Host() decorator is used commonly when we want the Host component (e.g. CourseCardComponent) of the directive (e.g. [highlighted])
+        to access to the same instance of the service
+    */
 
+    constructor(/* @Host() private service: AnyService */) {
+
+    }
 
   /* DOM Property */
   // @HostBinding('className')
