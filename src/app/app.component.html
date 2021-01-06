@@ -18,12 +18,12 @@
 
     <div class="courses" *ngIf="courses[0] as course">
 
+        <!-- #highlighter="hglht"
+            highlighted -->
         <course-card 
-            #highlighter="hglht"
-            highlighted
             (toggleHighlight)="onToggle($event)"
-                (courseSelected)="onCourseSelected($event)"
-                    [course]="course">
+            (courseSelected)="onCourseSelected($event)"
+            [course]="course">
 
             <!--  *ngxUnless custom structural directive (ngx-unless.directive.ts)  -->
             <course-image 
@@ -45,7 +45,7 @@
 
     <!--  this is what Angular, under the hood, does when it applies a structural directive as *ngIf (for example in the div of courses)  -->
     <!--  In order to do that, Angular has to grab a reference onto the template in order to instanciate it  -->
-    <ng-template [ngIf]="courses[0]" let-course>
+    <!-- <ng-template [ngIf]="courses[0]" let-course>
 
         <div class="courses">
         
@@ -70,7 +70,7 @@
         
         </div>
 
-    </ng-template>
+    </ng-template> -->
 
 
 </div>
