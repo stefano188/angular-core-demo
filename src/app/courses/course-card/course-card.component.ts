@@ -17,8 +17,8 @@ import {
     ViewChild,
     ViewChildren
 } from '@angular/core';
-import {COURSES} from '../../db-data';
-import {Course} from '../model/course';
+import {COURSES} from '../../../db-data';
+import {Course} from '../../model/course';
 import {CourseImageComponent} from '../course-image/course-image.component';
 
 @Component({

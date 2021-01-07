@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, Optional, QueryList, Self, SkipSelf, ViewChild, ViewChildren} from '@angular/core';
 import {COURSES} from '../db-data';
 import {Course} from './model/course';
-import {CourseCardComponent} from './course-card/course-card.component';
-import {HighlightedDirective} from './directives/highlighted.directive';
+import {CourseCardComponent} from './courses/course-card/course-card.component';
+import {HighlightedDirective} from './courses/directives/highlighted.directive';
 import {Observable} from 'rxjs';
 import { AppConfig, APP_CONFIG, CONFIG_TOKEN } from './config';
 
