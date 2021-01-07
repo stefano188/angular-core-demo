@@ -16,12 +16,16 @@
     </div>
 
     <div class="demo">
-        <button (click)="onEditCourse()">Edit Course</button>
+        <!-- ee4cf28f0e504b82154f8d03d5c86310e34f36d2 -->
+        
+        <button (click)="onEditCourse()" i18n>Edit Course</button>
     </div>
 
 
     <div class="courses">
 
+        <h4 i18n="welcome message|greet user">Welcome to Angular Core Deep Dive Course</h4>
+        
         <!-- #highlighter="hglht"
             highlighted -->
         <course-card *ngFor="let course of courses | filterByCategory: 'BEGINNER'"
