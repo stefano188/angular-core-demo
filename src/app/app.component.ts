@@ -64,6 +64,10 @@ export class AppComponent implements AfterViewInit {
       // this.highlightedCourseDir.toggle();
     }
 
+    onEditCourse() {
+      this.courses[1].category = 'ADVANCED'
+    }
+
     onCourseSelected(course:Course) {
 
     }

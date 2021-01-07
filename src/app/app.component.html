@@ -9,18 +9,22 @@
     Test outside salmon-theme Course Card
 </div>
 
-<div class="salmon-theme">
+<div class="">
 
     <div class="course-card">
         Test inside salmon-theme Course Card
     </div>
 
+    <div class="demo">
+        <button (click)="onEditCourse()">Edit Course</button>
+    </div>
 
-    <div class="courses" *ngIf="courses[0] as course">
+
+    <div class="courses">
 
         <!-- #highlighter="hglht"
             highlighted -->
-        <course-card 
+        <course-card *ngFor="let course of courses | filterByCategory: 'BEGINNER'"
             (toggleHighlight)="onToggle($event)"
             (courseSelected)="onCourseSelected($event)"
             [course]="course">
